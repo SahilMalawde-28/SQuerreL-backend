@@ -10,20 +10,18 @@ const PORT = 5000;
 
 const allowedOrigins = ['http://localhost:5173', 'https://s-querrel-j6ki.vercel.app'];
 
-app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error('Not allowed by CORS'));
-        }
-    },
-    methods: 'GET, POST, PUT, DELETE, OPTIONS',
-    allowedHeaders: 'Content-Type, Authorization'
-}));
+app.use(cors({ origin: "*" })); // 🔥 Allows all origins (Not safe for production)
+app.use(express.json());
 
-// Handle Preflight (OPTIONS)
-app.options('*', cors());
+app.all("*", (req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "*");
+    if (req.method === "OPTIONS") {
+        return res.sendStatus(200);
+    }
+    next();
+});
 app.use(bodyParser.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
