@@ -10,15 +10,14 @@ const PORT = 5000;
 
 const allowedOrigins = ['http://localhost:5173', 'https://s-querrel-j6ki.vercel.app'];
 
-app.use(cors({ origin: "*" })); // 🔥 Allows all origins (Not safe for production)
-app.use(express.json());
+app.use(cors({ origin: "*" })); // Allow all origins (for testing)
 
-app.all("*", (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*"); // Explicitly set CORS headers
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "*");
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
     if (req.method === "OPTIONS") {
-        return res.sendStatus(200);
+        return res.sendStatus(204);
     }
     next();
 });
