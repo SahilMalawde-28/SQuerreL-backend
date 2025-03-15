@@ -8,7 +8,7 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const app = express();
 const PORT = 5000;
 
-const allowedOrigins = ['http://localhost:5173', 'https://your-frontend.vercel.app'];
+const allowedOrigins = ['http://localhost:5173', 'https://s-querrel-j6ki.vercel.app'];
 
 app.use(cors({
     origin: function (origin, callback) {
