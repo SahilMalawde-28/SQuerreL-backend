@@ -20,6 +20,7 @@ app.use((req, res, next) => {
     }
     next();
 });
+
 app.use(bodyParser.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
