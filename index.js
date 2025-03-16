@@ -8,18 +8,16 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const app = express();
 const PORT = 5000;
 
-app.use(cors()); // Allow all origins
+app.use(cors({
+  origin: "https://s-querrel-j6ki.vercel.app", // Allow only your frontend
+  methods: "GET,POST,PUT,DELETE,OPTIONS",
+  allowedHeaders: "Content-Type, Authorization"
+}));
 
-// app.use((req, res, next) => {
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//     res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    
-//     if (req.method === "OPTIONS") {
-//         return res.sendStatus(204);
-//     }
-//     next();
-// });
+// ✅ Handle preflight OPTIONS request
+app.options("*", (req, res) => {
+  res.status(200).send(); // Important: Send a 200 OK response
+});
 app.use(bodyParser.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
