@@ -3,6 +3,12 @@
     "scripts": {
         "start": "node server.js"
     },
+    
+        "engines": {
+          "node": "18.x"
+        },
+      
+      
     "dependencies": {
         "@google/generative-ai": "^0.24.0",
         "axios": "^1.8.3",
