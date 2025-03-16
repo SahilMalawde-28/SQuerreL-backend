@@ -9,15 +9,21 @@ const app = express();
 const PORT = 5000;
 
 app.use(cors({
-  origin: "https://s-querrel-j6ki.vercel.app", // Allow only your frontend
+  origin: "https://s-querrel-j6ki.vercel.app", // ✅ Allow frontend origin
   methods: "GET,POST,PUT,DELETE,OPTIONS",
   allowedHeaders: "Content-Type, Authorization"
 }));
 
-// ✅ Handle preflight OPTIONS request
+// ✅ Important: Explicitly handle preflight requests
 app.options("*", (req, res) => {
-  res.status(200).send(); // Important: Send a 200 OK response
+  res.setHeader("Access-Control-Allow-Origin", "https://s-querrel-j6ki.vercel.app");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Max-Age", "86400"); // Cache preflight response
+  res.status(204).end(); // No content response (204)
 });
+
+
 app.use(bodyParser.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -28,6 +34,11 @@ const db = new sqlite3.Database(":memory:", (err) => {
   } else {
       console.log("🚀 Virtual Database Ready!");
   }
+});
+
+// ✅ Test route (Ensure API is working)
+app.get("/", (req, res) => {
+  res.json({ message: "Server is running!" });
 });
 
 // ✅ Route to Execute SQL Commands
